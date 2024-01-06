@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
-const config = require("config");
 
 const User = require("../../models/User");
 
@@ -39,11 +38,10 @@ router.post(
 
       let hashedPassword = await bcrypt.hash(password, salt);
       let role = 0; // for normal users, role is 0
-
       // check if it is a Admin signup
       if (req.header("admin-signup-key")) {
         // check adminSignupKey
-        if (req.header("admin-signup-key") === config.get("admin-signup-key")) {
+        if (req.header("admin-signup-key") === "admin-signup-key") {
           role = 1; // for admin, role is 1
         }
       }
@@ -62,10 +60,9 @@ router.post(
           role: user.role,
         },
       };
-
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        process.env.JWT_SECRET,
         { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
@@ -121,7 +118,7 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        config.get(process.env.JWT_SECRET),
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
