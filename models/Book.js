@@ -24,6 +24,11 @@ const BookSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  rate: [],
+  author: [{ type: String, required: true }],
+  bookDesription: {
+    type: String,
+  },
 });
 
 module.exports = Book = mongoose.model("book", BookSchema);
