@@ -1,8 +1,9 @@
+process.env.SUPPRESS_NO_CONFIG_WARNING = "1";
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL, {
+    await mongoose.createConnection(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
@@ -10,7 +11,7 @@ const connectDB = async () => {
     });
     console.log("Connected to MongoDB");
   } catch (err) {
-    console.error(err.message);
+    console.error("Error connecting to MongoDB:", err.message);
     process.exit(1);
   }
 };
